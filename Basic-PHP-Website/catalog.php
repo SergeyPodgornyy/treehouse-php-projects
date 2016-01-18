@@ -1,4 +1,7 @@
 <?php 
+include("inc/data.php");
+include("inc/functions.php");
+
 $pageTitle = "Full Catalog";
 $section = null;
 
@@ -19,8 +22,17 @@ if(isset($_GET['cat'])){
 
 include("inc/header.php"); ?>
 
-<div class="section page">
-	<h1><?php echo $pageTitle; ?></h1>
+<div class="section catalog page">
+	<div class="wrapper">
+		<h1><?php echo $pageTitle; ?></h1>
+		<ul class="catalog">
+			<?php
+				foreach($catalog as $id => $item){
+					echo get_item_html($id,$item);
+				}
+			?>
+		</ul>
+	</div>
 </div>
 
 <?php include("inc/footer.php"); ?>
