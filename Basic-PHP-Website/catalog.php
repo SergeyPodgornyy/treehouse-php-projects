@@ -24,11 +24,16 @@ include("inc/header.php"); ?>
 
 <div class="section catalog page">
 	<div class="wrapper">
-		<h1><?php echo $pageTitle; ?></h1>
+		<h1><?php 
+		if($section!==null)
+			echo "<a href='catalog.php'>Full Catalog</a> &gt; ";
+		echo $pageTitle; ?></h1>
+
 		<ul class="catalog">
 			<?php
-				foreach($catalog as $id => $item){
-					echo get_item_html($id,$item);
+				$categories = array_category($catalog,$section);
+				foreach($categories as $id){
+					echo get_item_html($id,$catalog[$id]);
 				}
 			?>
 		</ul>
