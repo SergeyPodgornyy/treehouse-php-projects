@@ -639,6 +639,7 @@ form td textarea {
     border: 1px solid #a5a5a5;
     font-size: 14px;
     font-family: 'Open Sans', sans-serif;
+    resize: vertical;
 }
 form input[type="submit"] {
     width: 475px;
