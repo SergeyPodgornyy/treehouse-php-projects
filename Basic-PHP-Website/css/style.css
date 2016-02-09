@@ -657,6 +657,11 @@ form input[type="submit"] {
     background: #358dce;
     cursor: pointer;
   }
+.required{
+    color:red;
+    font-weight: normal;
+    font-style: italic;
+}
 .page p.message {
     background: #ffeca4;
     border: 1px solid #f16702;

@@ -1,73 +1,38 @@
 <?php 
+include("inc/data.php");
+include("inc/functions.php");
 
 if($_SERVER["REQUEST_METHOD"]=="POST"){
 	$name = trim(filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING));
 	$email = trim(filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL));
+	$category = trim(filter_input(INPUT_POST, 'category', FILTER_SANITIZE_STRING));
+	$title = trim(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING));
+	$format = trim(filter_input(INPUT_POST, 'format', FILTER_SANITIZE_STRING));
+	$genre = trim(filter_input(INPUT_POST, 'genre', FILTER_SANITIZE_STRING));
+	$year = trim(filter_input(INPUT_POST, 'year', FILTER_SANITIZE_STRING));
 	$details = trim(filter_input(INPUT_POST, 'details', FILTER_SANITIZE_SPECIAL_CHARS));
 
-	if($name == "" || $email == "" || $details == ""){
-		echo "Please fill in the required fields: Name, Email and Details!";
-		exit;
+	if($name == "" || $email == "" || $category == "" || $title == ""){
+		$error_message = "Please fill in the required fields: Name, Email, Category and Title!";
 	}
-	if ($_POST["address"] != ""){
-		echo "Bad form input!";
-		exit;
+	if (!isset($error_message) && $_POST["address"] != ""){
+		$error_message = "Bad form input!";
 	}
-
-	$email_body = "<html>
-		<body>
-			<div style='font­-size:16px;
-						font-family:Tahoma,Arial,Helvetica,Verdana,sans-serif;
-						color:#333;'>
-				<div>
-					<img src='http://www.download-free-wallpaper.com/img85/cimqpfjpnwftuuvgyyqt.jpg' alt='Logo' width='105px' height='100px'>
-					<h2 style='display:inline­-block;vertical-align:top;margin­-left:30px;'>
-						Personal Media Library <br> Library
-					</h2>
-				</div>
-				<div style='font­-size:16px;
-							font-family:Tahoma,Arial,Helvetica,Verdana,sans­-serif;
-							color:#333;
-							border­-left:5px solid #B30606;
-							padding:0 0 0 20px;'>
-				<p>
-					<b style='color:#B30606;'>Name</b>: ".$name."
-				</p>
-				<p>
-					<b style='color:#B30606;'>Email</b>: ".$email."
-				</p>
-				<p>
-					<b style='color:#B30606;'>Message</b>:<br> ".$details."
-				</p>
-				</div>
-			</div>
-		</body>
-		</html>";
 
 	require("inc/phpmailer/class.phpmailer.php");
 
 	$mail = new PHPMailer;
 
-	// if(!$mail->ValidateAddress($mail)){
-	// 	echo "Invalide Email Address!";
-	// 	exit;
-	// }
-
-	$mail->setFrom($email, $name);
-	$mail->addAddress('sergey@localhost', 'Sergey');     // Add a recipient
-
-	$mail->isHTML(true);                                  // Set email format to HTML
-
-	$mail->Subject = 'Personal Media Library Suggestion from ' . $name;
-	$mail->Body    = $email_body;
-
-	if(!$mail->send()) {
-	    echo 'Message could not be sent.';
-	    echo 'Mailer Error: ' . $mail->ErrorInfo;
-	    exit;
+	if(!isset($error_message) && !$mail->ValidateAddress($email)){
+		$error_message = "Invalide Email Address!";
 	}
 
-	header("location:suggest.php?status=thanks");
+	if(!isset($error_message)){
+		send_email($mail,$name,$email,$category,$title,$format,$genre,$year,$details);
+
+		$error_message = 'Message could not be sent.';
+		$error_message = 'Mailer Error: ' . $mail->ErrorInfo;
+	}
 }
 
 $pageTitle = "Suggest a Media Item";
@@ -82,20 +47,70 @@ include("inc/header.php"); ?>
 			} else { 
 		?>
 		<h1>Suggest a Media Item</h1>
-		<p>If you think there is something I&rsquo;m missing, let me know! Complete the form to send me an email.</p>
+		<?php
+			if(isset($error_message)){
+				echo "<p class='message'>".$error_message."</p>";
+			}else{
+				echo "<p>If you think there is something I&rsquo;m missing, let me know! Complete the form to send me an email.</p>";
+			}
+		?>
 		<form action="suggest.php" method="POST">
 			<table>
 				<tr>
-					<th><label for="name">Name</label></th>
-					<td><input type="text" id="name" name="name"></td>
+					<th><label for="name">Name <span class="required">(required)</span></label></th>
+					<td><input type="text" id="name" name="name" <?php echo isset($name)?"value='".$name."'":""; ?>></td>
 				</tr>
 				<tr>
-					<th><label for="email">Email</label></th>
-					<td><input type="text" id="email" name="email"></td>
+					<th><label for="email">Email <span class="required">(required)</span></label></th>
+					<td><input type="text" id="email" name="email" <?php echo isset($email)?"value='".$email."'":""; ?>></td>
 				</tr>
 				<tr>
-					<th><label for="details">Suggest Item details</label></th>
-					<td><textarea name="details" id="details"></textarea></td>
+					<th><label for="category">Category <span class="required">(required)</span></label></th>
+					<td><select id="category" name="category" <?php echo isset($name)?"value='".$name."'":""; ?>>
+							<option value="">Select One</option>
+							<option value="Books" <?php if(isset($category) && $category=="Books"){ echo "selected";}?>>Book</option>
+							<option value="Movies" <?php if(isset($category) && $category=="Movies"){ echo "selected";}?>>Movie</option>
+							<option value="Music" <?php if(isset($category) && $category=="Music"){ echo "selected";}?>>Music</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="title">Title <span class="required">(required)</span></label></th>
+					<td><input type="text" id="title" name="title" <?php echo isset($title)?"value='".$title."'":""; ?>></td>
+				</tr>
+				<tr>
+	                <th>
+	                    <label for="format">Format</label>
+	                </th>
+	                <td>
+	                    <select name="format" id="format">
+	                        <option value="">Select One</option>
+	                        <?php
+								get_options_list($formats,$format);
+							?>
+	                    </select>
+	                </td>
+	            </tr>
+				<tr>
+	                <th>
+	                    <label for="genre">Genre</label>
+	                </th>
+	                <td>
+	                    <select name="genre" id="genre">
+	                        <option value="">Select One</option>
+	                        <?php
+								get_options_list($genres,$genre);
+							?>
+	                    </select>
+	                </td>
+	            </tr>
+				<tr>
+					<th><label for="year">Year</label></th>
+					<td><input type="text" id="year" name="year" <?php echo isset($year)?"value='".$year."'":""; ?>></td>
+				</tr>
+				<tr>
+					<th><label for="details">Additional details</label></th>
+					<td><textarea name="details" id="details"> <?php echo isset($details)?$details:""; ?> </textarea></td>
 				</tr>
 				<tr style="display:none">
 					<th><label for="address">Address</label></th>

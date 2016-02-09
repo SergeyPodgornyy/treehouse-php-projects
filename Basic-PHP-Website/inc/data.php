@@ -183,3 +183,92 @@ $catalog[304] = [
     "category" => "Music",
     "artist" => "Nat King Cole"
 ];
+
+
+// Formats defined for Suggest form
+
+$formats["Books"] = [
+                    "Audio",
+                    "Ebook",
+                    "Hardcover",
+                    "Paperback"
+];
+$formats["Movies"] = [
+                    "Blu-ray",
+                    "DVD",
+                    "Streaming",
+                    "VHS"
+];
+$formats["Music"] = [
+                    "Cassette",
+                    "CD",
+                    "MP3",
+                    "Vinyl"
+];
+
+// Genres defined for Suggest form
+
+$genres["Books"] = [
+                    "Action",
+                    "Adventure",
+                    "Comedy",
+                    "Fantasy",
+                    "Historical",
+                    "Historical Fiction",
+                    "Horror",
+                    "Magical Realism",
+                    "Mystery",
+                    "Paranoid",
+                    "Philosophical",
+                    "Political",
+                    "Romance",
+                    "Saga",
+                    "Satire",
+                    "Sci-Fi",
+                    "Tech",
+                    "Thriller",
+                    "Urban"
+];
+$genres["Movies"] = [
+                    "Action",
+                    "Adventure",
+                    "Animation",
+                    "Biography",
+                    "Comedy",
+                    "Crime",
+                    "Documentary",
+                    "Drama",
+                    "Family",
+                    "Fantasy",
+                    "Film-Noir",
+                    "History",
+                    "Horror",
+                    "Musical",
+                    "Mystery",
+                    "Romance",
+                    "Sci-Fi",
+                    "Sport",
+                    "Thriller",
+                    "War",
+                    "Western"
+];
+$genres["Music"] = [
+                    "Alternative",
+                    "Blues",
+                    "Classical",
+                    "Country",
+                    "Dance",
+                    "Easy Listening",
+                    "Electronic",
+                    "Folk",
+                    "Hip Hop/Rap",
+                    "Inspirational/Gospel",
+                    "Jazz",
+                    "Latin",
+                    "New Age",
+                    "Opera",
+                    "Pop",
+                    "R&B/Sou",
+                    "Reggae",
+                    "Rock"
+];
