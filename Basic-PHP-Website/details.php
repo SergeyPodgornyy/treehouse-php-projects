@@ -1,101 +1,101 @@
-<?php 
+<?php
 include("inc/data.php");
 include("inc/functions.php");
 
-if(isset($_GET['id'])){
-	$id = $_GET['id'];
-	if(isset($catalog[$id])){
-		$item = $catalog[$id];
-	}
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+    if (isset($catalog[$id])) {
+        $item = $catalog[$id];
+    }
 }
 
-if(!isset($catalog[$id])){
-	header("location:catalog.php");
-	exit;
+if (!isset($catalog[$id])) {
+    header("location:catalog.php");
+    exit;
 }
 
 $pageTitle = $item["title"];
 $section = null;
 
-include("inc/header.php"); ?>
+include("inc/header.php");
+?>
 
 <div class="section page">
-	<div class="wrapper">
+    <div class="wrapper">
+        <div class="breadcrumb">
+            <a href="catalog.php">Full Catalog</a>
+            &gt;
+            <a href="<?= "catalog.php?cat=".strtolower($item["category"]); ?>"><?= $item["category"]; ?></a>
+            &gt;
+            <?= $item["title"]; ?>
+        </div>
 
-		<div class="breadcrumb">
-			<a href="catalog.php">Full Catalog</a>
-			&gt;
-			<a href="<?php echo "catalog.php?cat=".strtolower($item["category"]); ?>"><?php echo $item["category"]; ?></a>
-			&gt;
-			<?php echo $item["title"]; ?>
-		</div>
+        <div class="media-picture">
+            <span>
+                <img src="<?= $item["img"];?>" alt="<?= $item["title"];?>">
+            </span>
+        </div>
+        <div class="media-details">
+            <h1><?= $item["title"]; ?></h1>
+            <table>
+                <tr>
+                    <th>Category</th>
+                    <td><?= $item["category"]; ?></td>
+                </tr>
+                <tr>
+                    <th>Genre</th>
+                    <td><?= $item["genre"]; ?></td>
+                </tr>
+                <tr>
+                    <th>Format</th>
+                    <td><?= $item["format"]; ?></td>
+                </tr>
+                <tr>
+                    <th>Year</th>
+                    <td><?= $item["year"]; ?></td>
+                </tr>
 
-		<div class="media-picture">
-			<span>
-				<img src="<?php echo $item["img"];?>" alt="<?php echo $item["title"];?>">
-			</span>
-		</div>
-		<div class="media-details">
-			<h1><?php echo $item["title"];?></h1>
-			<table>
-				<tr>
-					<th>Category</th>
-					<td><?php echo $item["category"];?></td>
-				</tr>
-				<tr>
-					<th>Genre</th>
-					<td><?php echo $item["genre"];?></td>
-				</tr>
-				<tr>
-					<th>Format</th>
-					<td><?php echo $item["format"];?></td>
-				</tr>
-				<tr>
-					<th>Year</th>
-					<td><?php echo $item["year"];?></td>
-				</tr>
+                <?php if (strtolower($item["category"]) === "books") : ?>
 
-				<?php if(strtolower($item["category"])==="books"){ ?>
+                    <tr>
+                        <th>Authors</th>
+                        <td><?= implode(", ", $item["authors"]);?></td>
+                    </tr>
+                    <tr>
+                        <th>Publisher</th>
+                        <td><?= $item["publisher"];?></td>
+                    </tr>
+                    <tr>
+                        <th>ISBN</th>
+                        <td><?= $item["isbn"];?></td>
+                    </tr>
 
-					<tr>
-						<th>Authors</th>
-						<td><?php echo implode(", ", $item["authors"]);?></td>
-					</tr>
-					<tr>
-						<th>Publisher</th>
-						<td><?php echo $item["publisher"];?></td>
-					</tr>
-					<tr>
-						<th>ISBN</th>
-						<td><?php echo $item["isbn"];?></td>
-					</tr>
+                <?php elseif (strtolower($item["category"]) === "movies") : ?>
 
-				<?php } else if(strtolower($item["category"])==="movies"){ ?>
-					
-					<tr>
-						<th>Director</th>
-						<td><?php echo $item["director"];?></td>
-					</tr>
-					<tr>
-						<th>Writers</th>
-						<td><?php echo implode(", ", $item["writers"]);?></td>
-					</tr>
-					<tr>
-						<th>Stars</th>
-						<td><?php echo implode(", ", $item["stars"]);?></td>
-					</tr>
+                    <tr>
+                        <th>Director</th>
+                        <td><?= $item["director"];?></td>
+                    </tr>
+                    <tr>
+                        <th>Writers</th>
+                        <td><?= implode(", ", $item["writers"]);?></td>
+                    </tr>
+                    <tr>
+                        <th>Stars</th>
+                        <td><?= implode(", ", $item["stars"]);?></td>
+                    </tr>
 
-				<?php } else if(strtolower($item["category"])==="music"){ ?>
-					
-					<tr>
-						<th>Artists</th>
-						<td><?php echo $item["artist"];?></td>
-					</tr>
+                <?php elseif (strtolower($item["category"]) === "music") : ?>
 
-				<?php } ?>
-			</table>
-		</div>
-	</div>
+                    <tr>
+                        <th>Artists</th>
+                        <td><?= $item["artist"];?></td>
+                    </tr>
+
+                <?php endif; ?>
+            </table>
+        </div>
+    </div>
 </div>
 
 <?php include("inc/footer.php"); ?>
